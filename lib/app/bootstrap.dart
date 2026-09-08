@@ -13,17 +13,22 @@ import '../island/state/presentation_router.dart';
 import '../modules/activities/activity_center.dart';
 import '../modules/calendar/calendar_controller.dart';
 import '../modules/clipboard/clipboard_controller.dart';
+import '../modules/connectivity/connectivity_controller.dart';
 import '../modules/downloads/downloads_controller.dart';
 import '../modules/media/media_controller.dart';
 import '../modules/notifications/notification_center.dart';
 import '../modules/shelf/shelf_controller.dart';
 import '../modules/system/system_controller.dart';
 import '../modules/timers/timer_controller.dart';
+import '../modules/weather/weather_controller.dart';
+import '../modules/weather/weather_service.dart';
 import '../native/clipboard_bridge.dart';
+import '../native/connectivity_bridge.dart';
 import '../native/display_bridge.dart';
 import '../native/downloads_bridge.dart';
 import '../native/hotkey_bridge.dart';
 import '../native/media_bridge.dart';
+import '../native/power_bridge.dart';
 import '../native/shelf_bridge.dart';
 import '../native/shell_bridge.dart';
 import '../native/startup_bridge.dart';
@@ -120,6 +125,8 @@ Future<AppServices> _buildServices() async {
   final DownloadsBridge downloadsBridge = DownloadsBridge();
   final ClipboardBridge clipboardBridge = ClipboardBridge();
   final SystemBridge systemBridge = SystemBridge();
+  final ConnectivityBridge connectivityBridge = ConnectivityBridge();
+  final PowerBridge powerBridge = PowerBridge();
   final ShellBridge shellBridge = ShellBridge();
   final ShelfBridge shelfBridge = ShelfBridge();
   final HotkeyBridge hotkeys = HotkeyBridge();
@@ -156,6 +163,17 @@ Future<AppServices> _buildServices() async {
   final SystemController system = SystemController(
     bridge: systemBridge,
     notifications: notifications,
+  );
+
+  final ConnectivityController connectivity = ConnectivityController(
+    bridge: connectivityBridge,
+    notifications: notifications,
+  );
+  // Constructed with the settings it reads, and idle until a view claims it:
+  // nothing leaves this machine because the island happens to be running.
+  final WeatherController weather = WeatherController(
+    service: WeatherService(),
+    settings: settings,
   );
 
   final CalendarController calendar = CalendarController(
@@ -197,6 +215,8 @@ Future<AppServices> _buildServices() async {
     timers: timers,
     clipboard: clipboard,
     system: system,
+    connectivity: connectivity,
+    weather: weather,
     calendar: calendar,
     shelf: shelf,
     activities: activities,
@@ -207,6 +227,8 @@ Future<AppServices> _buildServices() async {
     downloadsBridge: downloadsBridge,
     clipboardBridge: clipboardBridge,
     systemBridge: systemBridge,
+    connectivityBridge: connectivityBridge,
+    power: powerBridge,
     shell: shellBridge,
     hotkeys: hotkeys,
     hotkeyConflicts: ValueNotifier<Set<String>>(const <String>{}),

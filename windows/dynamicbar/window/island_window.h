@@ -38,11 +38,13 @@ struct LogicalRect {
 // Where the stage sits on its monitor.
 struct StagePlacement {
   std::string monitor_id;      // Empty means "follow the primary monitor".
-  // Logical pixels. These match IslandMetrics.stageSize() at scale 1.0 so the
-  // window is created at its final size and the engine never has to resize its
-  // surface during the first frames.
-  double width = 752.0;
-  double height = 456.0;
+  // Logical pixels. These match IslandMetrics.stageSize(), which is one size
+  // for every mode and scale, so the window is created at its final size and
+  // the engine never has to resize its surface - not during the first frames,
+  // and not later either. A resize leaves DWM stretching the old surface into
+  // the new rectangle.
+  double width = 1284.0;
+  double height = 900.6;
   double align_x = 0.5;        // 0 = left edge, 0.5 = centred, 1 = right edge.
   double offset_x = 0.0;       // Logical pixels, applied after alignment.
   double offset_y = 0.0;       // Logical pixels from the top of the area.

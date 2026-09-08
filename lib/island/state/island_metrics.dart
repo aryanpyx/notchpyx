@@ -58,7 +58,11 @@ class IslandMetrics {
   /// viewport resized as you swiped would make the shape the loudest thing on
   /// screen. Transient faces (a notification, a recording notice) keep their
   /// own smaller sizes because they are not part of the pager.
-  static const Size pagerSize = Size(486, 322);
+  ///
+  /// The height carries the home page's four panels: a clock, today's agenda
+  /// and a deck that opens under the pointer do not fit in the 322 this was
+  /// before, and every other page spends the extra 26 on breathing room.
+  static const Size pagerSize = Size(486, 348);
 
   /// Extra collapsed width per Live Activity shown beside the clock.
   static const double activityWidth = 62;
@@ -202,20 +206,26 @@ class IslandMetrics {
     return Rect.fromLTWH(left, 0, width, height);
   }
 
-  /// Stage size needed to hold every island state plus room for shadow.
+  /// The largest island scale the settings allow. The stage is sized for it
+  /// whatever the user has chosen, so changing the scale never resizes the
+  /// window.
+  static const double maxScale = 1.35;
+
+  /// Stage size: one size, for every mode and every scale.
   ///
-  /// Derived from the declared maxima rather than from any particular mode, so
-  /// adding a larger module cannot silently start clipping the shadow.
+  /// It holds the settings panel at the largest scale, which is the biggest
+  /// thing the island ever becomes, plus room for shadow. The arguments are
+  /// accepted for the callers that still describe what they are showing, and
+  /// deliberately ignored: the stage window is created once at this size and
+  /// must never be resized afterwards. Resizing it - even once, at startup,
+  /// from the default to a scaled-down island - left DWM presenting the
+  /// engine's old surface stretched into the new rectangle, and the island
+  /// drawn wider than its window and clipped on the right. The native default
+  /// in `island_window.h` carries the same two numbers for the same reason.
   static Size stageSize({double scale = 1.0, bool panel = false}) {
-    if (panel) {
-      return Size(
-        settingsSize.width * scale + DbSize.stagePadding,
-        settingsSize.height * scale + DbSize.stagePadding,
-      );
-    }
     return Size(
-      DbSize.maxWidth * scale + DbSize.stagePadding * 2,
-      DbSize.maxHeight * scale + DbSize.stagePadding,
+      settingsSize.width * maxScale + DbSize.stagePadding,
+      settingsSize.height * maxScale + DbSize.stagePadding,
     );
   }
 

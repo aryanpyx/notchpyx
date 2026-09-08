@@ -40,6 +40,14 @@ class AppSettings {
     this.autoHide = true,
     this.autoHideSeconds = 3,
     this.pinnedShortcuts = ShortcutCatalog.defaultPinned,
+    this.homeShortcuts = ShortcutCatalog.defaultHome,
+    this.homeDeckEnabled = true,
+    this.weatherEnabled = true,
+    this.weatherAutoLocate = true,
+    this.weatherMetric = true,
+    this.weatherPlace = '',
+    this.weatherLatitude,
+    this.weatherLongitude,
     this.disabledPages = const <String>[],
     this.introSeen = false,
     this.hotkeyToggle = 'Ctrl + Alt + Space',
@@ -118,6 +126,33 @@ class AppSettings {
   /// list is a real answer - a page the user has cleared - and is kept.
   final List<String> pinnedShortcuts;
 
+  /// The four shortcuts on the home page's Apps panel, in the order they
+  /// appear. Kept apart from [pinnedShortcuts]: the Shortcuts page is a
+  /// drawer, and this is the shelf by the door.
+  final List<String> homeShortcuts;
+
+  /// The four panels under the clock. Switched off, the home page is the clock
+  /// and today's agenda, as it was.
+  final bool homeDeckEnabled;
+
+  /// The one module that reaches the internet. Off means no request is ever
+  /// made, not a hidden tile that keeps fetching.
+  final bool weatherEnabled;
+
+  /// Whether an unset location may be looked up from this connection's address.
+  /// Off leaves the tile asking for a place until one is chosen by hand.
+  final bool weatherAutoLocate;
+
+  /// Celsius and km/h, or Fahrenheit and mph.
+  final bool weatherMetric;
+
+  /// Display name of the chosen place, for example `Erbil, Iraq`.
+  final String weatherPlace;
+
+  /// Null until a place has been chosen or found.
+  final double? weatherLatitude;
+  final double? weatherLongitude;
+
   /// Page ids the user has switched off. Absent pages are not built at all.
   final List<String> disabledPages;
 
@@ -162,6 +197,14 @@ class AppSettings {
     bool? autoHide,
     int? autoHideSeconds,
     List<String>? pinnedShortcuts,
+    List<String>? homeShortcuts,
+    bool? homeDeckEnabled,
+    bool? weatherEnabled,
+    bool? weatherAutoLocate,
+    bool? weatherMetric,
+    String? weatherPlace,
+    double? weatherLatitude,
+    double? weatherLongitude,
     List<String>? disabledPages,
     bool? introSeen,
     String? hotkeyToggle,
@@ -200,6 +243,14 @@ class AppSettings {
       autoHide: autoHide ?? this.autoHide,
       autoHideSeconds: autoHideSeconds ?? this.autoHideSeconds,
       pinnedShortcuts: pinnedShortcuts ?? this.pinnedShortcuts,
+      homeShortcuts: homeShortcuts ?? this.homeShortcuts,
+      homeDeckEnabled: homeDeckEnabled ?? this.homeDeckEnabled,
+      weatherEnabled: weatherEnabled ?? this.weatherEnabled,
+      weatherAutoLocate: weatherAutoLocate ?? this.weatherAutoLocate,
+      weatherMetric: weatherMetric ?? this.weatherMetric,
+      weatherPlace: weatherPlace ?? this.weatherPlace,
+      weatherLatitude: weatherLatitude ?? this.weatherLatitude,
+      weatherLongitude: weatherLongitude ?? this.weatherLongitude,
       disabledPages: disabledPages ?? this.disabledPages,
       introSeen: introSeen ?? this.introSeen,
       hotkeyToggle: hotkeyToggle ?? this.hotkeyToggle,
@@ -240,6 +291,14 @@ class AppSettings {
     'autoHide': autoHide,
     'autoHideSeconds': autoHideSeconds,
     'pinnedShortcuts': pinnedShortcuts,
+    'homeShortcuts': homeShortcuts,
+    'homeDeckEnabled': homeDeckEnabled,
+    'weatherEnabled': weatherEnabled,
+    'weatherAutoLocate': weatherAutoLocate,
+    'weatherMetric': weatherMetric,
+    'weatherPlace': weatherPlace,
+    'weatherLatitude': weatherLatitude,
+    'weatherLongitude': weatherLongitude,
     'disabledPages': disabledPages,
     'introSeen': introSeen,
     'hotkeyToggle': hotkeyToggle,
@@ -338,6 +397,17 @@ class AppSettings {
         json['pinnedShortcuts'],
         defaults.pinnedShortcuts,
       ),
+      homeShortcuts: _stringList(json['homeShortcuts'], defaults.homeShortcuts),
+      homeDeckEnabled: _bool(json['homeDeckEnabled'], defaults.homeDeckEnabled),
+      weatherEnabled: _bool(json['weatherEnabled'], defaults.weatherEnabled),
+      weatherAutoLocate: _bool(
+        json['weatherAutoLocate'],
+        defaults.weatherAutoLocate,
+      ),
+      weatherMetric: _bool(json['weatherMetric'], defaults.weatherMetric),
+      weatherPlace: _string(json['weatherPlace'], defaults.weatherPlace),
+      weatherLatitude: _nullableDouble(json['weatherLatitude'], 90),
+      weatherLongitude: _nullableDouble(json['weatherLongitude'], 180),
       disabledPages: _stringList(json['disabledPages'], defaults.disabledPages),
       introSeen: _bool(json['introSeen'], defaults.introSeen),
       hotkeyToggle: _string(json['hotkeyToggle'], defaults.hotkeyToggle),
@@ -356,6 +426,16 @@ class AppSettings {
       return value.toDouble().clamp(min, max).toDouble();
     }
     return fallback;
+  }
+
+  /// A coordinate, or null when there is not a usable one. Out of range means
+  /// the file was hand edited into something no forecast could answer, which
+  /// is the same as not having a place at all.
+  static double? _nullableDouble(Object? value, double limit) {
+    if (value is num && value.isFinite && value.abs() <= limit) {
+      return value.toDouble();
+    }
+    return null;
   }
 
   static bool _bool(Object? value, bool fallback) =>

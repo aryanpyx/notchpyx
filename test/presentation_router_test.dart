@@ -168,12 +168,11 @@ void main() {
   });
 
   group('Stage sizing', () {
-    test('settings gets its own, larger stage', () {
+    test('one stage holds every mode, so it is never resized', () {
       final islandStage = IslandMetrics.stageSize();
       final panelStage = IslandMetrics.stageSize(panel: true);
 
-      expect(panelStage.width, greaterThan(islandStage.width));
-      expect(panelStage.height, greaterThan(islandStage.height));
+      expect(panelStage, islandStage);
       expect(IslandMode.settings.needsPanelStage, isTrue);
       expect(IslandMode.media.needsPanelStage, isFalse);
     });
@@ -182,10 +181,13 @@ void main() {
       expect(IslandMetrics.fitsInStage(IslandMode.settings), isTrue);
     });
 
-    test('user scaling grows both stages', () {
+    test('user scaling does not move the stage, and the largest fits', () {
       final normal = IslandMetrics.stageSize();
-      final large = IslandMetrics.stageSize(scale: 1.35);
-      expect(large.width, greaterThan(normal.width));
+      final large = IslandMetrics.stageSize(scale: IslandMetrics.maxScale);
+      expect(large, normal);
+      final settings = IslandMetrics.expandedSizeFor(IslandMode.settings);
+      expect(settings.width * IslandMetrics.maxScale, lessThan(normal.width));
+      expect(settings.height * IslandMetrics.maxScale, lessThan(normal.height));
     });
   });
 }

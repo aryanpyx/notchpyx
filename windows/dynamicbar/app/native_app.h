@@ -10,10 +10,12 @@
 #include <memory>
 
 #include "dynamicbar/clipboard/clipboard_service.h"
+#include "dynamicbar/connectivity/connectivity_service.h"
 #include "dynamicbar/display/display_channel.h"
 #include "dynamicbar/downloads/downloads_service.h"
 #include "dynamicbar/hotkey/hotkey_service.h"
 #include "dynamicbar/media/media_service.h"
+#include "dynamicbar/power/power_channel.h"
 #include "dynamicbar/shelf/shelf_channel.h"
 #include "dynamicbar/shell/shell_channel.h"
 #include "dynamicbar/startup/startup_service.h"
@@ -49,6 +51,8 @@ class NativeApp {
   std::unique_ptr<ClipboardService> clipboard_service_;
   std::unique_ptr<DownloadsService> downloads_service_;
   std::unique_ptr<SystemService> system_service_;
+  std::unique_ptr<ConnectivityService> connectivity_service_;
+  std::unique_ptr<PowerChannel> power_channel_;
   std::unique_ptr<HotkeyService> hotkey_service_;
   std::unique_ptr<StartupService> startup_service_;
 };

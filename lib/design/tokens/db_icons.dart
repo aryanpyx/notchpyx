@@ -83,6 +83,47 @@ class DbIcons {
   static const IconData upload = Icons.upload_rounded;
   static const IconData today = Icons.today_rounded;
 
+  // Power and session. Kept apart from the page glyphs above because these
+  // are the only icons in the set attached to an irreversible action.
+  static const IconData lock = Icons.lock_outline_rounded;
+  static const IconData lockSmall = Icons.lock_rounded;
+  static const IconData sleep = Icons.bedtime_outlined;
+  static const IconData hibernate = Icons.snooze_rounded;
+  static const IconData screenOff = Icons.desktop_access_disabled_rounded;
+  static const IconData signOut = Icons.logout_rounded;
+
+  // Connectivity
+  static const IconData wifiOff = Icons.wifi_off_rounded;
+  static const IconData bluetoothConnected = Icons.bluetooth_connected_rounded;
+  static const IconData bluetoothOff = Icons.bluetooth_disabled_rounded;
+  static const IconData headphones = Icons.headphones_rounded;
+  static const IconData mouse = Icons.mouse_rounded;
+  static const IconData phone = Icons.smartphone_rounded;
+  static const IconData laptop = Icons.laptop_rounded;
+  static const IconData watch = Icons.watch_rounded;
+  static const IconData printer = Icons.print_rounded;
+  static const IconData devices = Icons.devices_other_rounded;
+
+  // Weather. Enough distinct glyphs to tell the six kinds of sky apart, and
+  // no more: a forecast rendered at thirteen pixels does not need forty.
+  static const IconData weatherClear = Icons.wb_sunny_rounded;
+  static const IconData weatherNight = Icons.nightlight_round;
+  static const IconData weatherPartly = Icons.wb_cloudy_rounded;
+  static const IconData weatherCloudy = Icons.cloud_rounded;
+  static const IconData weatherRain = Icons.grain_rounded;
+  static const IconData weatherSnow = Icons.ac_unit_rounded;
+  static const IconData weatherStorm = Icons.flash_on_rounded;
+  static const IconData weatherFog = Icons.blur_on_rounded;
+  static const IconData wind = Icons.air_rounded;
+  static const IconData humidity = Icons.water_drop_outlined;
+  static const IconData thermostat = Icons.thermostat_rounded;
+  static const IconData place = Icons.place_outlined;
+
+  // Small actions
+  static const IconData refresh = Icons.refresh_rounded;
+  static const IconData edit = Icons.edit_outlined;
+  static const IconData back = Icons.arrow_back_rounded;
+
   // Settings navigation
   static const IconData appearance = Icons.palette_outlined;
   static const IconData display = Icons.desktop_windows_rounded;

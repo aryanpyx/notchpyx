@@ -52,6 +52,8 @@ int NativeApp::Run(const flutter::DartProject& project, int icon_resource_id) {
   clipboard_service_ = std::make_unique<ClipboardService>(messenger);
   downloads_service_ = std::make_unique<DownloadsService>(messenger);
   system_service_ = std::make_unique<SystemService>(messenger);
+  connectivity_service_ = std::make_unique<ConnectivityService>(messenger);
+  power_channel_ = std::make_unique<PowerChannel>(messenger);
   hotkey_service_ = std::make_unique<HotkeyService>(messenger);
   startup_service_ = std::make_unique<StartupService>(messenger);
 
@@ -72,6 +74,8 @@ void NativeApp::Shutdown() {
   // Channels first: they hold raw pointers into the engine and the window.
   startup_service_.reset();
   hotkey_service_.reset();
+  power_channel_.reset();
+  connectivity_service_.reset();
   system_service_.reset();
   downloads_service_.reset();
   clipboard_service_.reset();

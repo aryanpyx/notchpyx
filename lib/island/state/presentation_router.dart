@@ -64,14 +64,23 @@ class PresentationRouter extends ChangeNotifier {
 
   IslandMode _mode = IslandMode.idle;
   bool _settingsOpen = false;
+  String? _settingsSection;
 
   IslandMode get mode => _mode;
   bool get isSettingsOpen => _settingsOpen;
 
+  /// Which part of settings to land on, when whoever opened it had somewhere
+  /// specific in mind. A plain string rather than the panel's own enum: this
+  /// layer decides *that* settings is showing, never how it is laid out.
+  String? get settingsSection => _settingsSection;
+
   /// Settings takes the island over completely: it is the one thing here the
   /// user opened on purpose, so nothing may push it aside.
-  void openSettings() {
+  void openSettings({String? section}) {
+    _settingsSection = section;
     if (_settingsOpen) {
+      // Already showing, and the panel reads the section on the way in, so
+      // there is nothing here for anyone to be told about.
       return;
     }
     _settingsOpen = true;
@@ -79,6 +88,7 @@ class PresentationRouter extends ChangeNotifier {
   }
 
   void closeSettings() {
+    _settingsSection = null;
     if (!_settingsOpen) {
       return;
     }

@@ -8,17 +8,21 @@ import '../island/state/presentation_router.dart';
 import '../modules/activities/activity_center.dart';
 import '../modules/calendar/calendar_controller.dart';
 import '../modules/clipboard/clipboard_controller.dart';
+import '../modules/connectivity/connectivity_controller.dart';
 import '../modules/downloads/downloads_controller.dart';
 import '../modules/media/media_controller.dart';
 import '../modules/notifications/notification_center.dart';
 import '../modules/shelf/shelf_controller.dart';
 import '../modules/system/system_controller.dart';
 import '../modules/timers/timer_controller.dart';
+import '../modules/weather/weather_controller.dart';
 import '../native/clipboard_bridge.dart';
+import '../native/connectivity_bridge.dart';
 import '../native/display_bridge.dart';
 import '../native/downloads_bridge.dart';
 import '../native/hotkey_bridge.dart';
 import '../native/media_bridge.dart';
+import '../native/power_bridge.dart';
 import '../native/shell_bridge.dart';
 import '../native/startup_bridge.dart';
 import '../native/system_bridge.dart';
@@ -46,6 +50,8 @@ class AppServices {
     required this.timers,
     required this.clipboard,
     required this.system,
+    required this.connectivity,
+    required this.weather,
     required this.calendar,
     required this.shelf,
     required this.activities,
@@ -56,6 +62,8 @@ class AppServices {
     required this.downloadsBridge,
     required this.clipboardBridge,
     required this.systemBridge,
+    required this.connectivityBridge,
+    required this.power,
     required this.hotkeys,
     required this.hotkeyConflicts,
     required this.shell,
@@ -76,6 +84,14 @@ class AppServices {
   final ClipboardController clipboard;
   final SystemController system;
 
+  /// Wi-Fi networks, paired Bluetooth devices and the two radio switches.
+  /// Watching only while a view has claimed it.
+  final ConnectivityController connectivity;
+
+  /// The forecast for one place. The only module that reaches the internet,
+  /// and only when it is switched on.
+  final WeatherController weather;
+
   /// Notes and reminders written on the calendar.
   final CalendarController calendar;
 
@@ -92,6 +108,12 @@ class AppServices {
   final DownloadsBridge downloadsBridge;
   final ClipboardBridge clipboardBridge;
   final SystemBridge systemBridge;
+  final ConnectivityBridge connectivityBridge;
+
+  /// Lock, sleep and the three that end the session. Stateless, like
+  /// [shell]: nothing to enable, nothing to tear down.
+  final PowerBridge power;
+
   final HotkeyBridge hotkeys;
 
   /// Opens applications, folders, addresses and Windows panels. Stateless:
@@ -114,6 +136,8 @@ class AppServices {
     shelf.dispose();
     calendar.dispose();
     activities.dispose();
+    weather.dispose();
+    connectivity.dispose();
     system.dispose();
     clipboard.dispose();
     timers.dispose();

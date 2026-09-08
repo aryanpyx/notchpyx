@@ -1,17 +1,25 @@
+import 'dart:async';
+
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter/widgets.dart';
 
 import '../../app/app_info.dart';
 import '../../app/app_services.dart';
 import '../../core/logging/app_logger.dart';
+import '../../design/components/island_button.dart';
 import '../../design/theme/island_theme.dart';
 import '../../design/theme/theme_controller.dart';
 import '../../design/tokens/db_colors.dart';
 import '../../design/tokens/db_dimens.dart';
+import '../../design/tokens/db_icons.dart';
+import '../../design/tokens/db_motion.dart';
 import '../../design/tokens/db_typography.dart';
+import '../../modules/notifications/island_notification.dart';
 import '../../island/state/island_page.dart';
 import '../../native/models/native_models.dart';
 import '../../native/startup_bridge.dart';
 import '../app_settings.dart';
+import 'home_settings.dart';
 import 'settings_controls.dart';
 
 /// Shared plumbing for every section: read the document, write it back.
@@ -442,6 +450,7 @@ class FeatureSettings extends _Section {
               ),
           ],
         ),
+        HomeSettings(services: services),
         SettingsSection(
           title: 'Modules',
           description:
@@ -685,6 +694,10 @@ class AboutSettings extends _Section {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SettingsSection(
+          title: 'Made by',
+          children: <Widget>[_DeveloperCard(services: services)],
+        ),
+        SettingsSection(
           title: 'About',
           children: <Widget>[
             Padding(
@@ -763,6 +776,221 @@ class AboutSettings extends _Section {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// The one page in the application that is about a person rather than a
+/// machine, so it is allowed to be the one card with a colour in it.
+///
+/// The monogram carries the accent, the name is set at the largest size this
+/// surface uses, and the address is a control rather than a label: click it to
+/// write, or take the copy button beside it. A contact you cannot act on is
+/// just decoration.
+class _DeveloperCard extends StatelessWidget {
+  const _DeveloperCard({required this.services});
+
+  final AppServices services;
+
+  Future<void> _write() async {
+    final bool opened = await services.shell.open(
+      'mailto:${AppInfo.developerEmail}',
+    );
+    if (!opened) {
+      services.notifications.post(
+        IslandNotification(
+          id: 'about.mail',
+          title: 'No mail app is set up',
+          body: AppInfo.developerEmail,
+          kind: NotificationKind.warning,
+        ),
+      );
+    }
+  }
+
+  Future<void> _copy() async {
+    await Clipboard.setData(
+      const ClipboardData(text: AppInfo.developerEmail),
+    );
+    services.notifications.post(
+      IslandNotification(
+        id: 'about.copy',
+        title: 'Address copied',
+        body: AppInfo.developerEmail,
+        kind: NotificationKind.system,
+        lifetime: Duration(milliseconds: 1800),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final IslandPalette palette = IslandTheme.of(context).palette;
+
+    return Container(
+      padding: const EdgeInsets.all(DbSpace.lg),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(DbRadius.card),
+        // A wash of the accent across one corner, nothing more: enough to
+        // make this card the one warm thing in a panel of switches.
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            palette.accent.withValues(alpha: palette.isDark ? 0.16 : 0.12),
+            palette.accent.withValues(alpha: 0.0),
+          ],
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          _Monogram(initials: AppInfo.developerInitials),
+          const SizedBox(width: DbSpace.lg),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  AppInfo.developer,
+                  style: DbType.headline.copyWith(
+                    color: palette.textPrimary,
+                    fontSize: 19,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${AppInfo.developerRole} · ${AppInfo.name}',
+                  style: DbType.caption.copyWith(color: palette.textTertiary),
+                ),
+                const SizedBox(height: DbSpace.sm),
+                _EmailChip(email: AppInfo.developerEmail, onPressed: _write),
+              ],
+            ),
+          ),
+          const SizedBox(width: DbSpace.md),
+          IslandButton(
+            icon: DbIcons.copy,
+            tooltip: 'Copy the address',
+            size: DbSize.controlMd,
+            onPressed: () => unawaited(_copy()),
+          ),
+          const SizedBox(width: DbSpace.sm),
+          IslandButton(
+            icon: DbIcons.mail,
+            label: 'Write',
+            tooltip: 'Open a new message to ${AppInfo.developer}',
+            tone: IslandButtonTone.accent,
+            onPressed: () => unawaited(_write()),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Two letters in a rounded square, in the accent. Cheaper than a photograph
+/// and truer than a stock avatar.
+class _Monogram extends StatelessWidget {
+  const _Monogram({required this.initials});
+
+  final String initials;
+
+  @override
+  Widget build(BuildContext context) {
+    final IslandPalette palette = IslandTheme.of(context).palette;
+
+    return Container(
+      width: 54,
+      height: 54,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: palette.accent.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(DbRadius.card),
+        border: Border.all(
+          color: palette.accent.withValues(alpha: 0.45),
+        ),
+      ),
+      child: Text(
+        initials,
+        style: DbType.headline.copyWith(
+          color: palette.accent,
+          fontSize: 20,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+}
+
+/// The address, as something you can click.
+class _EmailChip extends StatefulWidget {
+  const _EmailChip({required this.email, required this.onPressed});
+
+  final String email;
+  final Future<void> Function() onPressed;
+
+  @override
+  State<_EmailChip> createState() => _EmailChipState();
+}
+
+class _EmailChipState extends State<_EmailChip> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final IslandThemeData theme = IslandTheme.of(context);
+    final IslandPalette palette = theme.palette;
+
+    return Semantics(
+      button: true,
+      label: 'Write to ${widget.email}',
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => unawaited(widget.onPressed()),
+          child: AnimatedContainer(
+            duration: theme.motion.scale(DbDuration.micro),
+            curve: DbCurve.standard,
+            padding: const EdgeInsets.symmetric(
+              horizontal: DbSpace.sm,
+              vertical: DbSpace.xs,
+            ),
+            decoration: BoxDecoration(
+              color: _hovered
+                  ? palette.accent.withValues(alpha: 0.14)
+                  : palette.surfaceSunken,
+              borderRadius: BorderRadius.circular(DbRadius.pill),
+              border: Border.all(
+                color: _hovered ? palette.accent : palette.stroke,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  DbIcons.mail,
+                  size: 12,
+                  color: _hovered ? palette.accent : palette.textTertiary,
+                ),
+                const SizedBox(width: DbSpace.xs),
+                Text(
+                  widget.email,
+                  style: DbType.caption.copyWith(
+                    color: _hovered
+                        ? palette.accent
+                        : palette.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

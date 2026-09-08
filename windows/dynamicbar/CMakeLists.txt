@@ -26,6 +26,8 @@ add_library(${DYNAMICBAR_NATIVE} STATIC
   "clipboard/clipboard_service.cpp"
   "downloads/downloads_service.cpp"
   "system/system_service.cpp"
+  "connectivity/connectivity_service.cpp"
+  "power/power_channel.cpp"
   "hotkey/hotkey_service.cpp"
   "startup/startup_service.cpp"
   "app/native_app.cpp"
@@ -58,6 +60,8 @@ target_link_libraries(${DYNAMICBAR_NATIVE} PRIVATE
   "runtimeobject.lib"
   "iphlpapi.lib"
   "wlanapi.lib"
+  "bthprops.lib"
+  "powrprof.lib"
   "windowscodecs.lib"
   "uuid.lib"
 )

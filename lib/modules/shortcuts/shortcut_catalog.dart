@@ -364,6 +364,20 @@ class ShortcutCatalog {
     'settings',
   ];
 
+  /// The four on the home page's Apps panel until the user picks their own.
+  /// Deliberately one from each kind of thing a person opens: a folder, a
+  /// tool, a mailbox and something to watch.
+  static const List<String> defaultHome = <String>[
+    'explorer',
+    'terminal',
+    'gmail',
+    'youtube',
+  ];
+
+  /// How many the home panel shows. Four fit across it without shrinking the
+  /// labels into decoration.
+  static const int homeSlots = 4;
+
   static ShortcutEntry? byId(String id) {
     for (final ShortcutEntry entry in all) {
       if (entry.id == id) {

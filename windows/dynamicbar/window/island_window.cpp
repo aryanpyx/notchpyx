@@ -574,11 +574,18 @@ void IslandWindow::ApplyPlacement() {
   // Never SWP_NOREDRAW here: skipping the redraw leaves DWM holding the
   // child's previous surface geometry, and the Flutter view is then stretched
   // into the new rectangle instead of re-presented at it.
-  const UINT flags = SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_FRAMECHANGED;
+  // SWP_NOCOPYBITS as well: without it DWM keeps the previous client bits
+  // and stretches them into the new rectangle, and with a scaled island the
+  // very first placement is a resize - the stage is created at scale 1.0 and
+  // immediately re-placed at the user's scale. The result was a page drawn
+  // wider and shorter than its window, clipped on the right.
+  const UINT flags = SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_FRAMECHANGED |
+                     SWP_NOCOPYBITS;
   ::SetWindowPos(window_, always_on_top_ ? HWND_TOPMOST : HWND_NOTOPMOST, x, y,
                  width, height, flags);
   if (flutter_view_ != nullptr) {
-    ::MoveWindow(flutter_view_, 0, 0, width, height, TRUE);
+    ::SetWindowPos(flutter_view_, nullptr, 0, 0, width, height,
+                   SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS);
     RECT view = {};
     ::GetClientRect(flutter_view_, &view);
     DB_LOG_DEBUG(kTag, "Flutter view client " + std::to_string(view.right) +
@@ -866,8 +873,9 @@ LRESULT IslandWindow::HandleMessage(HWND window, UINT message, WPARAM wparam,
       if (flutter_view_ != nullptr) {
         RECT client = {};
         ::GetClientRect(window, &client);
-        ::MoveWindow(flutter_view_, 0, 0, client.right - client.left,
-                     client.bottom - client.top, TRUE);
+        ::SetWindowPos(flutter_view_, nullptr, 0, 0,
+                       client.right - client.left, client.bottom - client.top,
+                       SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS);
       }
       return 0;
 

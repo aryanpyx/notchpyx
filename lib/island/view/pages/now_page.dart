@@ -22,10 +22,13 @@ import '../../../native/system_bridge.dart';
 import '../../state/island_controller.dart';
 import '../../state/island_page.dart';
 import '../../state/island_state.dart';
+import '../../../settings/app_settings.dart';
+import 'home/connections_sheet.dart';
+import 'home/home_deck.dart';
 import 'intro_banner.dart';
 import 'page_scaffold.dart';
 
-/// The home page: the time, what is on today, and the few actions worth
+/// The home page: the time, what is on today, and the few things worth
 /// reaching without going anywhere else.
 ///
 /// The middle of this page used to be empty, which was defensible when it was
@@ -33,16 +36,36 @@ import 'page_scaffold.dart';
 /// What it carries now is the answer to the question people actually open a
 /// clock for - *what is next* - assembled from the notes on today's date and
 /// any timer that is running, and from nothing else.
-class NowPage extends StatelessWidget {
+///
+/// Under that sit the four panels of the [HomeDeck]: apps, power, weather and
+/// network. They open under the pointer without being clicked, and the network
+/// one can push a list of Wi-Fi networks or Bluetooth devices over this page -
+/// which is why the page owns that state rather than the deck does.
+class NowPage extends StatefulWidget {
   const NowPage({required this.controller, super.key});
 
   final IslandController controller;
 
   @override
+  State<NowPage> createState() => _NowPageState();
+}
+
+class _NowPageState extends State<NowPage> {
+  ConnectionsTarget? _connections;
+
+  void _openConnections(ConnectionsTarget target) =>
+      setState(() => _connections = target);
+
+  void _closeConnections() => setState(() => _connections = null);
+
+  @override
   Widget build(BuildContext context) {
     final AppServices services = AppScope.read(context);
     final IslandPalette palette = IslandTheme.of(context).palette;
-    final bool use24Hour = services.settings.settings.use24HourClock;
+    final AppSettings settings = services.settings.settings;
+    final bool use24Hour = settings.use24HourClock;
+    final bool deck = settings.homeDeckEnabled;
+    final IslandController controller = widget.controller;
 
     return SecondsScope(
       child: PageScaffold(
@@ -103,16 +126,21 @@ class NowPage extends StatelessWidget {
             ),
             const SizedBox(height: DbSpace.md),
             Expanded(
-              child: Reveal(
-                order: 1,
-                scaleFrom: 0.97,
-                child: _Today(controller: controller),
+              child: _Body(
+                controller: controller,
+                deck: deck,
+                connections: _connections,
+                onOpenConnections: _openConnections,
+                onCloseConnections: _closeConnections,
               ),
             ),
             const SizedBox(height: DbSpace.md),
             const IntroBanner(),
-            Reveal(order: 2, child: const _StatusLine()),
-            const SizedBox(height: DbSpace.md),
+            // The deck's network panel already carries the connection, the
+            // battery and the volume; showing them twice on one page would be
+            // the kind of duplication this design exists to avoid.
+            if (!deck) Reveal(order: 2, child: const _StatusLine()),
+            if (!deck) const SizedBox(height: DbSpace.md),
             Reveal(
               order: 3,
               scaleFrom: 0.95,
@@ -121,6 +149,114 @@ class NowPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// What sits between the clock and the actions.
+///
+/// Three arrangements of the same space: today's agenda over the deck, the
+/// agenda alone when the deck is switched off, or a list of connections
+/// covering both. They cross-fade rather than cut, because this is the middle
+/// of the page the user is already looking at.
+class _Body extends StatelessWidget {
+  const _Body({
+    required this.controller,
+    required this.deck,
+    required this.connections,
+    required this.onOpenConnections,
+    required this.onCloseConnections,
+  });
+
+  final IslandController controller;
+  final bool deck;
+  final ConnectionsTarget? connections;
+  final ValueChanged<ConnectionsTarget> onOpenConnections;
+  final VoidCallback onCloseConnections;
+
+  /// Height kept for today's agenda and the gap under it, before the deck is
+  /// given anything. One row and its heading, which is the least that is worth
+  /// showing at all.
+  static const double _agendaFloor = 62;
+
+  /// The least the agenda may be squeezed to before the deck sits a frame
+  /// out. Smaller than [_agendaFloor] on purpose: the floor decides how much
+  /// the deck gives back, this decides whether it appears at all, and at the
+  /// smallest island scale the page has 146 for both.
+  static const double _agendaMinimum = 24;
+
+  @override
+  Widget build(BuildContext context) {
+    final IslandThemeData theme = IslandTheme.of(context);
+    final ConnectionsTarget? target = deck ? connections : null;
+
+    final Widget child = target != null
+        ? ConnectionsSheet(
+            key: const ValueKey<String>('connections'),
+            target: target,
+            onTargetChanged: onOpenConnections,
+            onClose: onCloseConnections,
+          )
+        : LayoutBuilder(
+            key: const ValueKey<String>('home'),
+            builder: (BuildContext context, BoxConstraints constraints) {
+              // A smaller island scale takes the room out of this page, and
+              // the agenda has to keep a line of its own. The deck gives back
+              // what it can and tightens rather than clipping.
+              final double deckHeight =
+                  (constraints.maxHeight - _agendaFloor).clamp(
+                    HomeDeck.minHeight,
+                    HomeDeck.fullHeight,
+                  );
+              // While the island is mid-transition - coming back from the
+              // settings stage, say - a frame can arrive with less height than
+              // even the shortest deck. The deck sits that frame out rather
+              // than overflowing; the agenda is flexible and simply absorbs it.
+              final bool showDeck =
+                  deck &&
+                  constraints.maxHeight >=
+                      HomeDeck.minHeight + DbSpace.md + _agendaMinimum;
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: Reveal(
+                      order: 1,
+                      scaleFrom: 0.97,
+                      child: _Today(controller: controller),
+                    ),
+                  ),
+                  if (showDeck) ...<Widget>[
+                    const SizedBox(height: DbSpace.md),
+                    Reveal(
+                      order: 2,
+                      scaleFrom: 0.98,
+                      child: HomeDeck(
+                        height: deckHeight,
+                        onOpenConnections: onOpenConnections,
+                      ),
+                    ),
+                  ],
+                ],
+              );
+            },
+          );
+
+    return AnimatedSwitcher(
+      duration: theme.motion.scale(DbDuration.quick),
+      switchInCurve: DbCurve.standard,
+      switchOutCurve: DbCurve.exit,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.985, end: 1).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: child,
     );
   }
 }
@@ -536,7 +672,7 @@ class _Actions extends StatelessWidget {
         IslandButton(
           icon: DbIcons.settings,
           tooltip: 'Open settings',
-          onPressed: services.router.openSettings,
+          onPressed: () => services.router.openSettings(),
         ),
         const SizedBox(width: DbSpace.sm),
         IslandButton(

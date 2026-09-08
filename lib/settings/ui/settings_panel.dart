@@ -25,6 +25,19 @@ enum SettingsTab {
 }
 
 extension SettingsTabX on SettingsTab {
+  /// Identifier used when something elsewhere in the island asks for settings
+  /// to open on a particular section.
+  String get id => name;
+
+  static SettingsTab? fromId(String? id) {
+    for (final SettingsTab tab in SettingsTab.values) {
+      if (tab.id == id) {
+        return tab;
+      }
+    }
+    return null;
+  }
+
   String get label {
     switch (this) {
       case SettingsTab.general:
@@ -80,6 +93,7 @@ class SettingsPanel extends StatefulWidget {
 
 class _SettingsPanelState extends State<SettingsPanel> {
   SettingsTab _tab = SettingsTab.general;
+  bool _landed = false;
 
   List<DisplayInfo> _displays = const <DisplayInfo>[];
   StartupStatus _startup = StartupStatus.unknown;
@@ -92,6 +106,24 @@ class _SettingsPanelState extends State<SettingsPanel> {
     // Everything here is a one-shot query, refreshed when the panel opens
     // rather than held live: none of it changes while it is being read.
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadEnvironment());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_landed) {
+      return;
+    }
+    _landed = true;
+    // Whoever opened settings may have had a section in mind - the weather
+    // panel asking for a place, the home shelf asking which four apps. Honour
+    // it once, on the way in, and leave the user in charge after that.
+    final SettingsTab? requested = SettingsTabX.fromId(
+      AppScope.read(context).router.settingsSection,
+    );
+    if (requested != null) {
+      _tab = requested;
+    }
   }
 
   Future<void> _loadEnvironment() async {
