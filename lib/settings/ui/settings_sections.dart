@@ -407,10 +407,10 @@ class FeatureSettings extends _Section {
   /// have somewhere to land.
   static const List<IslandPage> _optionalPages = <IslandPage>[
     IslandPage.calendar,
+    IslandPage.timers,
     IslandPage.shortcuts,
     IslandPage.media,
     IslandPage.shelf,
-    IslandPage.timers,
     IslandPage.system,
   ];
 

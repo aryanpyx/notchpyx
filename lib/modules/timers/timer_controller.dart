@@ -24,17 +24,38 @@ class TimerController extends ChangeNotifier {
   final List<IslandTimer> _timers = <IslandTimer>[];
   Timer? _ticker;
   int _nextId = 1;
+  String? _focusedId;
 
   List<IslandTimer> get timers => List<IslandTimer>.unmodifiable(_timers);
   bool get hasTimers => _timers.isNotEmpty;
 
   bool get hasRunning => _timers.any((timer) => timer.isRunning);
 
-  /// The timer the island should show: the countdown closest to finishing, or
-  /// failing that the first running timer, or failing that the most recent.
+  /// The timer the user last asked to see, if it still exists. Set by
+  /// clicking one in the list; cleared when it is removed.
+  String? get focusedId => _focusedId;
+
+  /// Brings one timer to the front of the page. Null lets [primary] choose
+  /// again on its own.
+  void focus(String? id) {
+    final String? next = id != null && _find(id) != null ? id : null;
+    if (next == _focusedId) {
+      return;
+    }
+    _focusedId = next;
+    notifyListeners();
+  }
+
+  /// The timer the island should show: the one the user picked, else the
+  /// countdown closest to finishing, else the first running timer, else the
+  /// most recent.
   IslandTimer? get primary {
     if (_timers.isEmpty) {
       return null;
+    }
+    final IslandTimer? focused = _focusedId == null ? null : _find(_focusedId!);
+    if (focused != null) {
+      return focused;
     }
     final DateTime now = DateTime.now();
     final List<IslandTimer> running = _timers
@@ -133,6 +154,18 @@ class TimerController extends ChangeNotifier {
       accumulated: Duration.zero,
       clearRunningSince: true,
       clearFinishedAt: true,
+      laps: const <Duration>[],
+    );
+  });
+
+  /// Records the stopwatch's elapsed time as a lap. A countdown has no laps;
+  /// asking for one is ignored rather than invented.
+  void lap(String id) => _mutate(id, (IslandTimer timer) {
+    if (timer.kind != TimerKind.stopwatch || !timer.isRunning) {
+      return timer;
+    }
+    return timer.copyWith(
+      laps: <Duration>[...timer.laps, timer.elapsedAt(DateTime.now())],
     );
   });
 
@@ -140,6 +173,9 @@ class TimerController extends ChangeNotifier {
     final int before = _timers.length;
     _timers.removeWhere((timer) => timer.id == id);
     if (_timers.length != before) {
+      if (_focusedId == id) {
+        _focusedId = null;
+      }
       _notifications.dismiss('timer.$id');
       _syncTicker();
       notifyListeners();
@@ -151,6 +187,7 @@ class TimerController extends ChangeNotifier {
       _notifications.dismiss('timer.${timer.id}');
     }
     _timers.clear();
+    _focusedId = null;
     _syncTicker();
     notifyListeners();
   }

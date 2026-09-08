@@ -20,6 +20,7 @@ class IslandTimer {
     this.accumulated = Duration.zero,
     this.runningSince,
     this.finishedAt,
+    this.laps = const <Duration>[],
   });
 
   factory IslandTimer.countdown({
@@ -60,6 +61,9 @@ class IslandTimer {
   final DateTime? runningSince;
 
   final DateTime? finishedAt;
+
+  /// Elapsed time at each lap, oldest first. Only a stopwatch takes laps.
+  final List<Duration> laps;
 
   bool get isRunning => state == TimerState.running;
   bool get isFinished => state == TimerState.finished;
@@ -116,6 +120,7 @@ class IslandTimer {
     bool clearRunningSince = false,
     DateTime? finishedAt,
     bool clearFinishedAt = false,
+    List<Duration>? laps,
   }) {
     return IslandTimer(
       id: id,
@@ -128,6 +133,7 @@ class IslandTimer {
           ? null
           : (runningSince ?? this.runningSince),
       finishedAt: clearFinishedAt ? null : (finishedAt ?? this.finishedAt),
+      laps: laps ?? this.laps,
     );
   }
 }

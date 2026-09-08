@@ -57,7 +57,7 @@ Future<void> bootstrap([List<String> arguments = const <String>[]]) async {
         AppLog.write(
           LogLevel.error,
           'Flutter',
-          details.exceptionAsString(),
+          _describe(details),
           error: details.exception,
           stackTrace: details.stack,
         );
@@ -99,6 +99,30 @@ Future<void> bootstrap([List<String> arguments = const <String>[]]) async {
       );
     },
   );
+}
+
+/// The exception, and - for a layout error - which widget it was.
+///
+/// A RenderFlex overflow names the file and line of the widget that caused it,
+/// but only in the long form of the report. That line is the whole difference
+/// between a log entry that can be fixed and one that can only be noticed, so
+/// it is kept and the rest of the report is not.
+String _describe(FlutterErrorDetails details) {
+  final String summary = details.exceptionAsString();
+  final List<String> lines = details.toString().split('\n');
+  for (int i = 0; i < lines.length - 1; i++) {
+    if (lines[i].contains('error-causing widget')) {
+      // The widget is on the line that follows, and where it was made on
+      // the lines after that.
+      final Iterable<String> where = lines
+          .skip(i + 1)
+          .take(3)
+          .map((String l) => l.trim())
+          .where((String l) => l.isNotEmpty);
+      return '$summary | ${where.join(' ')}';
+    }
+  }
+  return summary;
 }
 
 Future<AppServices> _buildServices() async {

@@ -14,11 +14,11 @@ import '../../design/tokens/db_icons.dart';
 /// from the pager entirely rather than shown empty.
 enum IslandPage {
   now,
-  media,
   calendar,
-  shortcuts,
-  shelf,
   timers,
+  shortcuts,
+  media,
+  shelf,
   system,
   notes,
   clipboard,

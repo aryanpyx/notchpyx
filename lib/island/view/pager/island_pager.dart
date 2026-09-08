@@ -80,6 +80,15 @@ class _IslandPagerState extends State<IslandPager> {
     if (event is! PointerScrollEvent) {
       return;
     }
+    // Through the resolver, so a control inside a page that takes the wheel
+    // - a dial, a list - gets it first and the page does not turn under it.
+    GestureBinding.instance.pointerSignalResolver.register(event, _turnPage);
+  }
+
+  void _turnPage(PointerEvent event) {
+    if (event is! PointerScrollEvent) {
+      return;
+    }
     // A trackpad sends a stream of small deltas; one page per gesture is the
     // only sane reading of that, so the wheel is latched until it settles.
     final double delta = event.scrollDelta.dx.abs() > event.scrollDelta.dy.abs()

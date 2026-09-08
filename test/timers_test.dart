@@ -111,6 +111,39 @@ void main() {
       notifications.dispose();
     });
 
+    test('a focused timer is the primary one until it goes', () {
+      final String first = controller.addCountdown(const Duration(minutes: 1));
+      final String second = controller.addCountdown(const Duration(minutes: 9));
+      // Closest to finishing wins on its own...
+      expect(controller.primary!.id, first);
+      // ...unless the user has pointed at another.
+      controller.focus(second);
+      expect(controller.primary!.id, second);
+      controller.remove(second);
+      expect(controller.focusedId, isNull);
+      expect(controller.primary!.id, first);
+      // Pointing at nothing is ignored rather than trusted.
+      controller.focus('no-such-timer');
+      expect(controller.focusedId, isNull);
+    });
+
+    test('laps belong to a running stopwatch only', () {
+      final String stopwatch = controller.addStopwatch();
+      final String countdown = controller.addCountdown(
+        const Duration(minutes: 1),
+      );
+      controller.lap(stopwatch);
+      controller.lap(stopwatch);
+      controller.lap(countdown);
+      expect(controller.timers.first.laps.length, 2);
+      expect(controller.timers.last.laps, isEmpty);
+      controller.pause(stopwatch);
+      controller.lap(stopwatch);
+      expect(controller.timers.first.laps.length, 2);
+      controller.reset(stopwatch);
+      expect(controller.timers.first.laps, isEmpty);
+    });
+
     test('starts countdowns running by default', () {
       final String id = controller.addCountdown(const Duration(minutes: 5));
       expect(controller.timers.single.id, id);

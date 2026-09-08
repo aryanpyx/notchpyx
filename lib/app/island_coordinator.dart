@@ -249,10 +249,12 @@ class IslandCoordinator {
       // the other is a list of things to open. Neither observes anything, so
       // neither has a switch to be off.
       if (on(IslandPage.calendar, true)) IslandPage.calendar,
+      // Timers sit beside the calendar: both are about time, and a timer is
+      // the thing most often started right after looking at what is next.
+      if (on(IslandPage.timers, current.timersEnabled)) IslandPage.timers,
       if (on(IslandPage.shortcuts, true)) IslandPage.shortcuts,
       if (on(IslandPage.media, current.mediaEnabled)) IslandPage.media,
       if (on(IslandPage.shelf, true)) IslandPage.shelf,
-      if (on(IslandPage.timers, current.timersEnabled)) IslandPage.timers,
       if (on(IslandPage.system, current.systemStatusEnabled)) IslandPage.system,
     ]);
   }

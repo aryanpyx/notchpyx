@@ -350,6 +350,11 @@ class _Today extends StatelessWidget {
 
   static const int _maxRows = 3;
 
+  /// One row's height, margin included, for deciding how many fit, and the
+  /// heading's.
+  static const double _rowHeight = 22;
+  static const double _headerHeight = 14;
+
   @override
   Widget build(BuildContext context) {
     final AppServices services = AppScope.read(context);
@@ -418,37 +423,62 @@ class _Today extends StatelessWidget {
               horizontal: DbSpace.md,
               vertical: DbSpace.sm,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Row(
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints box) {
+                // Only as many rows as there is room for. With the deck
+                // below, the card can be as short as one line, and a
+                // reminder that does not fit is better counted than clipped.
+                final int fit = rows.isEmpty
+                    ? 0
+                    : ((box.maxHeight - _headerHeight) / _rowHeight)
+                          .floor()
+                          .clamp(1, rows.length);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Text(
-                      'TODAY',
-                      style: DbType.overline.copyWith(
-                        color: palette.textTertiary,
+                    SizedBox(
+                      height: _headerHeight,
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            'TODAY',
+                            style: DbType.overline.copyWith(
+                              color: palette.textTertiary,
+                            ),
+                          ),
+                          const Spacer(),
+                          if (total > fit)
+                            Text(
+                              '+${total - fit} more',
+                              style: DbType.caption.copyWith(
+                                color: palette.textTertiary,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                    const Spacer(),
-                    if (total > rows.length)
-                      Text(
-                        '+${total - rows.length} more',
-                        style: DbType.caption.copyWith(
-                          color: palette.textTertiary,
-                        ),
-                      ),
+                    Expanded(
+                      child: rows.isEmpty
+                          ? _Empty(controller: controller)
+                          // Laid out at their own height and clipped, so a
+                          // row a pixel taller than the estimate loses its
+                          // bottom margin rather than raising an error.
+                          : ClipRect(
+                              child: OverflowBox(
+                                alignment: Alignment.topCenter,
+                                maxHeight: double.infinity,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: rows.take(fit).toList(),
+                                ),
+                              ),
+                            ),
+                    ),
                   ],
-                ),
-                Expanded(
-                  child: rows.isEmpty
-                      ? _Empty(controller: controller)
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: rows,
-                        ),
-                ),
-              ],
+                );
+              },
             ),
           ),
         );
