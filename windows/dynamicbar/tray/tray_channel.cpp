@@ -247,13 +247,13 @@ void TrayChannel::HandleMethodCall(
 
   if (method == "install") {
     if (FindValue(args, "tooltip") != nullptr) {
-      tooltip_ = Utf16FromUtf8(GetString(args, "tooltip", "DynamicBar"));
+      tooltip_ = Utf16FromUtf8(GetString(args, "tooltip", "Notch X"));
     }
     result->Success(EncodableValue(AddIcon()));
     return;
   }
   if (method == "setTooltip") {
-    tooltip_ = Utf16FromUtf8(GetString(args, "tooltip", "DynamicBar"));
+    tooltip_ = Utf16FromUtf8(GetString(args, "tooltip", "Notch X"));
     UpdateTooltip();
     result->Success();
     return;

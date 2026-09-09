@@ -32,6 +32,35 @@ Every capability comes from a Win32 or WinRT API wrapped by hand in one C++
 library. There are **no runtime package dependencies** and the application makes
 **no network requests at all**.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/now.png" alt="The Now page: clock, week number, today's notes and a row of glanceable tiles"></td>
+    <td width="50%"><img src="docs/screenshots/calendar.png" alt="The Calendar page: a September month grid beside a day panel"></td>
+  </tr>
+  <tr>
+    <td><b>Now</b> &mdash; the time, the ISO week, what is on today, and the four tiles you glance at without opening anything.</td>
+    <td><b>Calendar</b> &mdash; a month grid and a day panel. Write a note on any day; give it a time and it becomes a reminder.</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/media.png" alt="The Media page: album art, title, artist, timeline and transport controls"></td>
+    <td><img src="docs/screenshots/shelf.png" alt="The Shelf page: two empty image slots and a scratch note field"></td>
+  </tr>
+  <tr>
+    <td><b>Media</b> &mdash; art, title, artist, timeline and transport, read from the same session API the Windows media flyout uses.</td>
+    <td><b>Shelf</b> &mdash; two image slots and a note. Paste an image, or drag one onto the island and it lands in the next free slot.</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/timers.png" alt="The Timers page: a draggable ring showing five minutes, next to duration presets"></td>
+    <td><img src="docs/screenshots/system.png" alt="The System page: rolling graphs for processor, memory and network"></td>
+  </tr>
+  <tr>
+    <td><b>Timers</b> &mdash; presets, and a ring you drag or scroll to set. Countdowns are computed from the wall clock, so they never drift.</td>
+    <td><b>System</b> &mdash; rolling one-minute graphs for processor, memory and network, with battery and connection underneath.</td>
+  </tr>
+</table>
+
 ## Features
 
 | Module | Source | What it does |

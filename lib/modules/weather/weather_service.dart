@@ -34,7 +34,7 @@ class WeatherService {
     final HttpClient client = HttpClient()
       ..connectionTimeout = timeout
       ..idleTimeout = const Duration(seconds: 5)
-      ..userAgent = '${AppInfo.name}/${AppInfo.version}';
+      ..userAgent = '${AppInfo.userAgentToken}/${AppInfo.version}';
     return client;
   }
 

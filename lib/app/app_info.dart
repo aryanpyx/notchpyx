@@ -6,7 +6,7 @@
 class AppInfo {
   const AppInfo._();
 
-  static const String name = 'DynamicBar';
+  static const String name = 'Notch X';
   static const String version = '0.1.0';
 
   static const String tagline = 'A Dynamic Island for Windows 11.';
@@ -16,6 +16,9 @@ class AppInfo {
   static const String developer = 'Rahoz Osman';
   static const String developerRole = 'Design and engineering';
   static const String developerEmail = 'hozahoza2001@gmail.com';
+
+  /// The name as an HTTP product token: User-Agent has no room for the space.
+  static String get userAgentToken => name.replaceAll(' ', '');
 
   /// The monogram, derived rather than typed twice.
   static String get developerInitials => developer

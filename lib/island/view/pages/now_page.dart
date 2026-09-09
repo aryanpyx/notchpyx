@@ -695,7 +695,7 @@ class _Actions extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: Text(
-            'DynamicBar',
+            'Notch X',
             style: DbType.label.copyWith(color: palette.textTertiary),
           ),
         ),
@@ -713,14 +713,14 @@ class _Actions extends StatelessWidget {
         const SizedBox(width: DbSpace.sm),
         IslandButton(
           icon: DbIcons.pause,
-          tooltip: 'Pause DynamicBar',
+          tooltip: 'Pause Notch X',
           onPressed: () => controller.setPaused(true),
         ),
         const SizedBox(width: DbSpace.sm),
         IslandButton(
           icon: DbIcons.power,
           tone: IslandButtonTone.danger,
-          tooltip: 'Quit DynamicBar',
+          tooltip: 'Quit Notch X',
           onPressed: () => services.window.quit(),
         ),
       ],

@@ -61,7 +61,7 @@ class TrayChannel {
   HICON icon_ = nullptr;
   int icon_resource_id_ = 0;
   bool icon_added_ = false;
-  std::wstring tooltip_ = L"DynamicBar";
+  std::wstring tooltip_ = L"Notch X";
   UINT taskbar_created_message_ = 0;
 
   std::vector<TrayMenuItem> menu_;
