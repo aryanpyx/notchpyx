@@ -28,7 +28,7 @@
 <div align="center">
 
 <!-- Embedded Walkthrough Animation -->
-<img src="docs/animations/notchpyx_walkthrough.gif" alt="Notchpyx Live Animated Walkthrough" width="90%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+<img src="docs/animations/notchpyx_walkthrough.gif?v=2" alt="Notchpyx Live Animated Walkthrough" width="90%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
 
 <p align="center">
   <i>Watch Notchpyx in action: Resting Notch ➔ Proximity Hover ➔ Spring Expansion ➔ Media Player Equalizer ➔ ~20 MB System Monitor ➔ Volume HUD Morph ➔ Retract</i>
@@ -103,24 +103,24 @@ assets/textizo_presets/
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/now.png" alt="The Now page"></td>
-    <td width="50%"><img src="docs/screenshots/shortcuts.png" alt="The Shortcuts page"></td>
+    <td width="50%"><img src="docs/showcase/notchpyx_now.png?raw=true" alt="The Now page"></td>
+    <td width="50%"><img src="docs/showcase/notchpyx_shortcuts.png?raw=true" alt="The Shortcuts page"></td>
   </tr>
   <tr>
     <td><b>Now & Clock</b> &mdash; Glanceable clock, ISO week, battery, weather, and schedule at a glance.</td>
     <td><b>Shortcuts</b> &mdash; Fast pinned launchers for YouTube, Spotify, Terminal, GitHub, and system utilities.</td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/media.png" alt="The Media page"></td>
-    <td><img src="docs/screenshots/system.png" alt="The System page"></td>
+    <td><img src="docs/showcase/notchpyx_media.png?raw=true" alt="The Media page"></td>
+    <td><img src="docs/showcase/notchpyx_system.png?raw=true" alt="The System page"></td>
   </tr>
   <tr>
     <td><b>Media Player</b> &mdash; Album art, track title, timeline progress, and media transport controls.</td>
     <td><b>System & Memory</b> &mdash; Real-time CPU, RAM graph (~20 MB engine), and network throughput.</td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/shelf.png" alt="The Shelf page"></td>
-    <td><img src="docs/screenshots/timers.png" alt="The Timers page"></td>
+    <td><img src="docs/showcase/notchpyx_shelf.png?raw=true" alt="The Shelf page"></td>
+    <td><img src="docs/showcase/notchpyx_timers.png?raw=true" alt="The Timers page"></td>
   </tr>
   <tr>
     <td><b>Shelf Scratchpad</b> &mdash; Instant drop zone for clipboard images, quick notes, and temporary items.</td>
