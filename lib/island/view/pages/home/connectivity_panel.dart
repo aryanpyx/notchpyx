@@ -198,7 +198,7 @@ class _Detail extends StatelessWidget {
               ),
               PanelIconButton(
                 icon: DbIcons.settings,
-                tooltip: 'Open Notch X settings',
+                tooltip: 'Open Notchpyx settings',
                 onPressed: () =>
                     services.router.openSettings(section: 'features'),
               ),

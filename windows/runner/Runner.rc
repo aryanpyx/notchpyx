@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "rahoz osman" "\0"
-            VALUE "FileDescription", "Notch X" "\0"
+            VALUE "CompanyName", "Aryan Pandey" "\0"
+            VALUE "FileDescription", "Notchpyx" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "Notch X" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 rahoz osman. All rights reserved." "\0"
-            VALUE "OriginalFilename", "DynamicBar.exe" "\0"
-            VALUE "ProductName", "Notch X" "\0"
+            VALUE "InternalName", "Notchpyx" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 Aryan Pandey. All rights reserved." "\0"
+            VALUE "OriginalFilename", "Notchpyx.exe" "\0"
+            VALUE "ProductName", "Notchpyx" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

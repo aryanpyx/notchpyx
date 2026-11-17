@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'models/native_models.dart';
 import 'native_channel.dart';
+import 'windows_region_helper.dart';
 
 /// Control surface for the transparent stage window.
 ///
@@ -38,24 +39,30 @@ class WindowBridge extends NativeChannel {
     return StageInfo.fromMap(result);
   }
 
-  /// Regions of the stage that accept mouse input. Everything else is
-  /// click-through, so the empty stage never blocks the desktop underneath.
-  Future<void> setInteractiveRects(List<Rect> rects) =>
-      invoke<void>('setInteractiveRects', <String, Object?>{
-        'rects': rects
-            .map(
-              (rect) => <String, Object?>{
-                'left': rect.left,
-                'top': rect.top,
-                'right': rect.right,
-                'bottom': rect.bottom,
-              },
-            )
-            .toList(growable: false),
-      });
+  /// Regions of the stage that accept mouse and touch input. Everything else is
+  /// clipped out via SetWindowRgn, so the empty stage never blocks the desktop underneath.
+  Future<void> setInteractiveRects(List<Rect> rects) {
+    WindowsRegionHelper.updateRegion(rects);
+    return invoke<void>('setInteractiveRects', <String, Object?>{
+      'rects': rects
+          .map(
+            (rect) => <String, Object?>{
+              'left': rect.left,
+              'top': rect.top,
+              'right': rect.right,
+              'bottom': rect.bottom,
+            },
+          )
+          .toList(growable: false),
+    });
+  }
 
-  Future<void> setVisible(bool visible) =>
-      invoke<void>('setVisible', <String, Object?>{'visible': visible});
+  Future<void> setVisible(bool visible) {
+    if (!visible) {
+      WindowsRegionHelper.updateRegion(const <Rect>[]);
+    }
+    return invoke<void>('setVisible', <String, Object?>{'visible': visible});
+  }
 
   /// When false, the island can be clicked without stealing focus from the
   /// application the user is actually working in.

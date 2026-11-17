@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 
 import '../design/theme/island_theme.dart';
@@ -62,7 +64,7 @@ class _DynamicBarAppState extends State<DynamicBarApp>
       child: WidgetsApp(
         color: const Color(0x00000000),
         debugShowCheckedModeBanner: false,
-        title: 'Notch X',
+        title: 'Notchpyx',
         builder: (BuildContext context, Widget? _) {
           return AnimatedBuilder(
             animation: services.theme,

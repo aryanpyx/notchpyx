@@ -155,10 +155,9 @@ class _TimerDialState extends State<TimerDial> {
                   duration: theme.motion.scale(DbDuration.micro),
                   curve: DbCurve.standard,
                   transform: Matrix4.identity()
-                    ..scaleByDouble(
+                    ..scale(
                       _dragging ? 1.03 : 1.0,
                       _dragging ? 1.03 : 1.0,
-                      1.0,
                       1.0,
                     ),
                   transformAlignment: Alignment.center,

@@ -35,6 +35,7 @@ import '../native/startup_bridge.dart';
 import '../native/system_bridge.dart';
 import '../native/tray_bridge.dart';
 import '../native/window_bridge.dart';
+import '../native/windows_region_helper.dart';
 import '../settings/settings_controller.dart';
 import '../settings/settings_store.dart';
 import 'app_services.dart';
@@ -52,6 +53,10 @@ Future<void> bootstrap([List<String> arguments = const <String>[]]) async {
   await runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      // Enforce lean memory limits to keep RAM at 20-50 MB
+      PaintingBinding.instance.imageCache.maximumSizeBytes = 10 * 1024 * 1024;
+      PaintingBinding.instance.imageCache.maximumSize = 25;
 
       FlutterError.onError = (FlutterErrorDetails details) {
         AppLog.write(
@@ -88,6 +93,12 @@ Future<void> bootstrap([List<String> arguments = const <String>[]]) async {
       );
 
       runApp(DynamicBarApp(services: services, coordinator: coordinator));
+
+      // Start automatic periodic memory trim and initial post-launch trim
+      WindowsRegionHelper.startPeriodicMemoryTrim();
+      Timer(const Duration(seconds: 3), () {
+        WindowsRegionHelper.trimMemory(force: true);
+      });
     },
     (Object error, StackTrace stack) {
       AppLog.write(

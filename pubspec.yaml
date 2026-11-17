@@ -1,15 +1,16 @@
-name: dynamicbar
-description: "Notch X - a premium Dynamic Island style overlay utility for Windows 11."
+name: notchpyx
+description: "Notchpyx - a premium Dynamic Island style overlay utility for Windows 11."
 publish_to: 'none'
 
 version: 0.1.0+1
 
 environment:
-  sdk: ^3.12.2
+  sdk: ^3.8.0
 
 dependencies:
   flutter:
     sdk: flutter
+  ffi: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -24,27 +25,27 @@ flutter:
 # Microsoft Store packaging (flutter pub run msix:create)
 #
 # identity_name and publisher below are the values Partner Center issued for
-# the reserved name "Notch X" (Partner Center > Notch X > Product identity).
+# the reserved name "Notchpyx" (Partner Center > Notchpyx > Product identity).
 # They must match it exactly or the upload is rejected, so do not edit them.
-# Package family name: rahozosman.NotchX_bqdbhgk3642f2
+# Package family name: aryanpandey.Notchpyx
 #
 # Bump msix_version for every new Store submission - the same version cannot
 # be uploaded twice.
 # ---------------------------------------------------------------------------
 msix_config:
-  display_name: Notch X
-  publisher_display_name: rahoz osman
-  identity_name: rahozosman.NotchX
+  display_name: Notchpyx
+  publisher_display_name: Aryan Pandey
+  identity_name: aryanpandey.Notchpyx
   publisher: CN=74E58D7B-C8D8-4939-83AF-C2EE41E72A19
   msix_version: 1.0.0.0
   logo_path: assets/app_icon.png
   capabilities: internetClient
-  description: Notch X - a premium Dynamic Island style overlay utility for Windows 11.
+  description: Notchpyx - a premium Dynamic Island style overlay utility for Windows 11.
   architecture: x64
   # Store submissions must be unsigned - Microsoft re-signs the package.
   # Set to false (and provide a certificate) only for sideloaded builds.
   store: true
-  # Uncomment to register Notch X as a Windows startup task. Required for
+  # Uncomment to register Notchpyx as a Windows startup task. Required for
   # "launch at login" to work at all inside an MSIX package: the HKCU\...\Run
   # write in windows/dynamicbar/startup/startup_service.cpp is virtualised away.
   # enable_at_startup: true

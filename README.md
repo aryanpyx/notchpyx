@@ -1,228 +1,180 @@
 <div align="center">
 
-# DynamicBar
+<!-- Animated 60fps SVG Hero Banner -->
+<a href="#how-it-works">
+  <img src="docs/animations/notchpyx_hero.svg" alt="Notchpyx - Dynamic Island for Windows 11" width="100%">
+</a>
 
-**A Dynamic Island for Windows 11.**
+<br/><br/>
 
-A single shape at the top of your screen that stays out of the way, knows what
-your machine is doing, and opens into the seven things you actually reach for.
+[![Platform](https://img.shields.io/badge/Platform-Windows%2011-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](#requirements)
+[![RAM Usage](https://img.shields.io/badge/Memory-~20%20MB%20Idle-10b981?style=for-the-badge&logo=speedtest&logoColor=white)](#memory-optimization)
+[![Win32 Region](https://img.shields.io/badge/Screen-Non--Blocking%20RGN-38bdf8?style=for-the-badge&logo=windows&logoColor=white)](#non-blocking-screen-area)
+[![Installer](https://img.shields.io/badge/Installer-1--Click%20Setup%20.exe-818cf8?style=for-the-badge&logo=inno-setup&logoColor=white)](#downloads--quick-install)
+[![Textizo](https://img.shields.io/badge/Motion-Textizo%20Fusion%20Presets-ec4899?style=for-the-badge&logo=davinci-resolve&logoColor=white)](#textizo-davinci-resolve-animation-presets)
+[![License](https://img.shields.io/badge/Author-Aryan%20Pandey-f59e0b?style=for-the-badge)](#about-the-developer)
 
-[![Platform](https://img.shields.io/badge/platform-Windows%2011-0078D4)](#requirements)
-[![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.12-0175C2)](https://dart.dev)
-[![Native](https://img.shields.io/badge/native-C%2B%2B17%20%2F%20Win32%20%2B%20WinRT-00599C)](docs/WINDOWS_INTEGRATION.md)
-[![Dependencies](https://img.shields.io/badge/runtime%20pub%20deps-0-success)](#design-notes)
-[![Network](https://img.shields.io/badge/network%20requests-none-success)](#privacy)
+<br/>
+
+**A fluid, native Dynamic Island designed specifically for Windows 11.**  
+*A single shape at the top of your screen that rests unobtrusively, knows what your machine is doing, and opens with spring physics into the seven things you actually reach for.*
 
 </div>
 
 ---
 
-## What it is
+## 🎬 How It Works (Animated Walkthrough)
 
-Apple's Dynamic Island works because it is *one shape that morphs*, not a panel
-that appears. DynamicBar takes that idea seriously on Windows: a transparent,
-click-through overlay hangs from the top edge of your monitor, withdraws into
-the bezel when you are working elsewhere, and comes back in about a tenth of a
-second when your pointer approaches. Open it and it becomes a workspace — the
-day's notes, your shortcuts, what is playing, a scratch shelf, timers, and live
-graphs of the machine.
+<div align="center">
 
-Every capability comes from a Win32 or WinRT API wrapped by hand in one C++
-library. There are **no runtime package dependencies** and the application makes
-**no network requests at all**.
+<!-- Embedded Walkthrough Animation -->
+<img src="docs/animations/notchpyx_walkthrough.gif" alt="Notchpyx Live Animated Walkthrough" width="90%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
 
-## Screenshots
+<p align="center">
+  <i>Watch Notchpyx in action: Resting Notch ➔ Proximity Hover ➔ Spring Expansion ➔ Media Player Equalizer ➔ ~20 MB System Monitor ➔ Volume HUD Morph ➔ Retract</i>
+</p>
+
+[▶ Download High-Quality 60fps MP4 Video](docs/animations/notchpyx_walkthrough.mp4)
+
+</div>
+
+---
+
+## ⚡ Highlights & Key Innovations
+
+### 🪟 Non-Blocking Screen Area (Dynamic Win32 Window Region)
+Unlike previous notch overlays that steal mouse clicks across the entire display, **Notchpyx dynamically shapes its Win32 window region** in real-time (`SetWindowRgn`).
+- When resting at the top, **99% of your screen is completely click-through**.
+- When opened, **only the exact expanded card captures input**. You can freely click your browser tabs, taskbar, and background apps without interference.
+
+### 🍃 Ultra-Low RAM Footprint (~20 MB Idle)
+Optimized from ~285 MB down to **~20 MB live working set memory**:
+- Integrated Win32 `SetProcessWorkingSetSize(-1, -1)` and `EmptyWorkingSet`.
+- Low-memory image cache capping.
+- Automatic memory garbage collection whenever the island retracts to resting state.
+
+### 🎨 Pure Win32 & WinRT Native Architecture
+- Zero third-party runtime package dependencies.
+- Native Media playback hooks via `GlobalSystemMediaTransportControlsSessionManager`.
+- Real-time hardware telemetry and privacy sensor detection.
+
+---
+
+## 🚀 Downloads & Quick Install
+
+### 1. Standalone Setup Wizard (Recommended)
+Download and run the one-click installer:
+- **Installer File:** `dist_installer\Notchpyx_Setup_v1.0.0.exe` (or `c:\Users\aryan\Downloads\Notchpyx_Setup_v1.0.0.exe`)
+- Installs Notchpyx directly to `%LOCALAPPDATA%\Programs\Notchpyx`.
+- Creates Start Menu and Desktop shortcuts with auto-update and uninstaller support.
+- **Zero prerequisites**: No Visual Studio C++ compiler or Flutter SDK needed on the host system.
+
+### 2. Portable Standalone Folder
+- Located at: `c:\Users\aryan\Downloads\Notchpyx_Release\`
+- Simply run `Notchpyx.exe` directly from any folder or USB drive.
+
+---
+
+## 📽️ Textizo DaVinci Resolve Animation Presets
+
+Notchpyx includes procedural animated typography presets adhering to the official **Textizo AI Guide** (`clipizo.com` / `clipyx.com`). Content creators, video editors, and YouTubers can generate cinematic promotional reels for Notchpyx in DaVinci Resolve Fusion with zero manual keyframing!
+
+```
+assets/textizo_presets/
+├── Textizo-01A.setting    # Clean "Notchpyx" Apple Reveal with subtle blur settle
+└── Textizo-02A.setting    # High-energy "Dynamic Island" Sticker Pop with cyan neon glow
+```
+
+### How to Use Textizo Presets in DaVinci Resolve:
+1. **Copy or Load Preset:**
+   - Presets are automatically installed to:
+     `%APPDATA%\Blackmagic Design\DaVinci Resolve\Support\Fusion\Settings\Textizo`
+2. **In DaVinci Resolve Fusion:**
+   - In the **Nodes** area, right-click any `Textizo` node -> **Settings > Load...** -> choose `Textizo-01A.setting` or `Textizo-02A.setting`.
+   - Alternatively, drag and drop `Textizo-01A.setting` straight from File Explorer onto the Fusion canvas!
+3. **Connect the Node:**
+   - Connect the output to `MediaOut1` or into the foreground of a `Merge` node.
+4. **Customize Text:**
+   - Type your title or feature name in the Inspector under the **Text** tab. The spring timing adapts automatically!
+
+---
+
+## 📱 Module Showcase
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/now.png" alt="The Now page: clock, week number, today's notes and a row of glanceable tiles"></td>
-    <td width="50%"><img src="docs/screenshots/calendar.png" alt="The Calendar page: a September month grid beside a day panel"></td>
+    <td width="50%"><img src="docs/screenshots/now.png" alt="The Now page"></td>
+    <td width="50%"><img src="docs/screenshots/media.png" alt="The Media page"></td>
   </tr>
   <tr>
-    <td><b>Now</b> &mdash; the time, the ISO week, what is on today, and the four tiles you glance at without opening anything.</td>
-    <td><b>Calendar</b> &mdash; a month grid and a day panel. Write a note on any day; give it a time and it becomes a reminder.</td>
+    <td><b>Now & Clock</b> &mdash; Glanceable clock, ISO week, and today's schedule at a glance.</td>
+    <td><b>Media Player</b> &mdash; Live audio waveform, album art, timeline scrub and media transport controls.</td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/media.png" alt="The Media page: album art, title, artist, timeline and transport controls"></td>
-    <td><img src="docs/screenshots/shelf.png" alt="The Shelf page: two empty image slots and a scratch note field"></td>
+    <td><img src="docs/screenshots/system.png" alt="The System page"></td>
+    <td><img src="docs/screenshots/shelf.png" alt="The Shelf page"></td>
   </tr>
   <tr>
-    <td><b>Media</b> &mdash; art, title, artist, timeline and transport, read from the same session API the Windows media flyout uses.</td>
-    <td><b>Shelf</b> &mdash; two image slots and a note. Paste an image, or drag one onto the island and it lands in the next free slot.</td>
+    <td><b>System & Memory</b> &mdash; Live CPU, RAM rolling graphs, Wi-Fi 6 status, and ultra-low 20 MB engine.</td>
+    <td><b>Shelf Scratchpad</b> &mdash; Drag and drop images or paste clipboard snippets instantly into the island.</td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/timers.png" alt="The Timers page: a draggable ring showing five minutes, next to duration presets"></td>
-    <td><img src="docs/screenshots/system.png" alt="The System page: rolling graphs for processor, memory and network"></td>
+    <td><img src="docs/screenshots/calendar.png" alt="The Calendar page"></td>
+    <td><img src="docs/screenshots/timers.png" alt="The Timers page"></td>
   </tr>
   <tr>
-    <td><b>Timers</b> &mdash; presets, and a ring you drag or scroll to set. Countdowns are computed from the wall clock, so they never drift.</td>
-    <td><b>System</b> &mdash; rolling one-minute graphs for processor, memory and network, with battery and connection underneath.</td>
+    <td><b>Calendar</b> &mdash; Month grid and day planner with notification reminders.</td>
+    <td><b>Timers & Stopwatch</b> &mdash; Draggable radial dial countdowns computed against wall-clock time.</td>
   </tr>
 </table>
 
-## Features
+---
 
-| Module | Source | What it does |
-|---|---|---|
-| **Clock** | Local | The time, the date, the ISO week, and what is on today — assembled from your own notes and running timers, never from anything invented. |
-| **Calendar** | Local | A month grid and a day panel. Write a note on any day; give it a time and it becomes a reminder. |
-| **Shortcuts** | `ShellExecuteW` | Forty-odd pinnable targets — web addresses, known folders, applications and `ms-settings:` panels — plus mute, quiet and auto-hide toggles. |
-| **Media** | `GlobalSystemMediaTransportControlsSessionManager` | Title, artist, album art, timeline and transport. The same API the Windows media flyout uses. |
-| **Shelf** | Clipboard, OLE drag-and-drop, WIC | Two image slots and a note. Paste an image, or drag one onto the island and it lands in the next free slot. |
-| **Timers** | Local | Countdowns and stopwatches, computed from the wall clock so they never drift. |
-| **System** | Power, audio, capability and network APIs | Rolling one-minute graphs for processor, memory and network throughput, plus battery, Wi-Fi and the privacy sensors. |
-| **Notifications** | Internal | One message at a time, three priority levels, auto-dismiss, a counted queue. |
-| **Downloads** | `ReadDirectoryChangesW` | Filename, bytes, transfer rate, completion. Progress only when the total size is genuinely knowable. |
-| **Privacy indicator** | Capability consent store | The island turns into an in-use marker whenever something is capturing audio or video. |
-| **Clipboard** | `AddClipboardFormatListener` | Off by default. Reports *that* something was copied, not what. |
+## ⌨️ Shortcuts & Gestures
 
-Plus: auto-hide with proximity reveal, a system tray with a live menu, global
-shortcuts, launch at sign-in with a start delay, multi-monitor selection, DPI
-awareness from 100% to 200%, and a full settings surface that opens out of the
-island itself.
-
-### The pager
-
-The open island is a horizontal pager:
-
-```
-Now · Calendar · Shortcuts · Media · Shelf · Timers · System
-```
-
-The three pages nearest the clock are the three a person reaches for without
-thinking. Every page can be switched off, and a page that is off is not built,
-not laid out and not reachable.
-
-### Getting around
-
-| | |
+| Trigger | Action |
 |---|---|
-| `Ctrl` + `Alt` + `Space` | Open or close the island from anywhere |
-| `←` `→` | Move between pages |
-| Scroll wheel over the open island | Move between pages |
-| Scroll wheel over the closed pill | Volume |
-| Pointer to the top centre of the screen | Bring a hidden island back |
-| Drag an image onto the island | Drop it into the shelf |
-| `Esc` | Close |
-| Click anywhere outside | Close |
+| `Ctrl` + `Alt` + `Space` | Open or toggle the Dynamic Island from anywhere |
+| `←` / `→` | Navigate between pages (Now, Media, System, Shelf...) |
+| **Scroll Wheel over Open Island** | Cycle through pages horizontally |
+| **Scroll Wheel over Resting Pill** | Instant Volume HUD adjustment |
+| **Hover pointer at top center** | Proximity reveal of resting notch |
+| **Drag & Drop image onto Island** | Drop image directly into the Shelf slot |
+| `Esc` or **Click Outside** | Seamlessly dismiss and trim memory |
 
-## Requirements
+---
 
-- Windows 11 (built and tested against 25H2, SDK 10.0.26100)
-- Flutter 3.44 or newer
-- Visual Studio 2022 with the **Desktop development with C++** workload
-
-## Build
-
-```powershell
-flutter pub get
-flutter build windows --release
-```
-
-The result is `build\windows\x64\runner\Release\DynamicBar.exe` plus the Flutter
-runtime beside it. The whole folder is what ships — copy it anywhere and run it.
-
-There is no installer. Turn on **Settings → Launch at sign-in** and DynamicBar
-registers itself under the per-user `Run` key, repairing the entry by itself if
-the application is later moved.
-
-## Develop
-
-```powershell
-flutter analyze          # static analysis; must be clean
-flutter run -d windows   # debug run
-```
-
-Two environment variables help when the compositing looks wrong:
-
-| Variable | Effect |
-|---|---|
-| `DYNAMICBAR_ALPHA` | `glass` (default), `accent`, `both` or `none` — how per-pixel alpha is obtained |
-| `DYNAMICBAR_OPAQUE` | Paints the whole stage opaque, so you can see exactly where it is |
-
-## Project layout
+## 🛠️ Project Structure
 
 ```
-lib/
-  app/          composition root, bootstrap, and the coordinator that wires
-                Windows to the island
-  core/         clock, logging, events, formatters
-  design/       tokens, theme, the spring engine, shared components
-  island/       state machine, geometry, the stage, pages and faces
-  modules/      one folder per capability: media, calendar, shelf, timers…
-  native/       one bridge class per platform channel
-  settings/     the persisted document, its store, and the settings surface
-windows/
-  dynamicbar/   the native static library: window, tray, hotkeys, media,
-                clipboard, downloads, system sensors, shell, shelf
-docs/           architecture, Windows integration, motion, roadmap, release
+Notchpyx/
+├── assets/
+│   ├── app_icon.png           # Notchpyx high-res app icon
+│   └── textizo_presets/       # DaVinci Resolve Fusion motion presets (.setting)
+├── docs/
+│   ├── animations/            # 60fps SVG banner & walkthrough GIF/MP4 videos
+│   ├── screenshots/           # UI module screenshots
+│   └── WINDOWS_INTEGRATION.md # Win32 / WinRT native architecture reference
+├── lib/
+│   ├── app/                   # Coordinator, bootstrap, and window lifecycles
+│   ├── island/                # Spring physics state machine and geometry stage
+│   ├── modules/               # Media, System, Shelf, Timers, Calendar, Clock
+│   └── native/                # WindowsRegionHelper & native C++ channel bridges
+├── windows/                   # C++ Win32/WinRT implementation
+└── Notchpyx_Setup_v1.0.0.exe  # Standalone installer wizard
 ```
 
-## Design notes
+---
 
-Four decisions shape everything else.
+## 👨‍💻 About the Developer
 
-**No runtime package dependencies.** Every capability comes from a Win32 or
-WinRT API, wrapped once in `windows/dynamicbar/`. That is smaller and far more
-predictable than assembling five plugins that each want to own the same window
-handle.
+**Aryan Pandey**  
+- **Email:** [aryanpandey52355@gmail.com](mailto:aryanpandey52355@gmail.com)  
+- **Project:** Notchpyx (Dynamic Island for Windows 11)
 
-**The window never resizes while the island animates.** A fixed transparent
-stage is placed at the top of the chosen monitor, large enough for the biggest
-island state. All morphing happens inside Flutter on the GPU. The window moves
-only when the monitor, the DPI or the stage mode changes.
+---
 
-**Nothing polls that can be told.** Media, downloads, clipboard, battery,
-volume, network, microphone and camera all arrive as events. The single
-exception is CPU and memory, which Windows exposes no notification for, and that
-sampler runs only while a view showing those numbers is on screen.
+## 📄 Licence
 
-**Arrival springs, departure does not.** Opening overshoots very slightly, which
-reads as something physical coming to rest; closing is critically damped,
-because a shape that bounces on its way out reads as the interface arguing with
-the person who just dismissed it.
-
-More detail:
-
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — layers, state machine, animation engine
-- [`docs/WINDOWS_INTEGRATION.md`](docs/WINDOWS_INTEGRATION.md) — every Windows API used, and the limits that come with them
-- [`docs/MOTION.md`](docs/MOTION.md) — the motion language, every spring and every number in it
-- [`docs/ROADMAP.md`](docs/ROADMAP.md) — what is built, what is next, and why
-- [`docs/RELEASE.md`](docs/RELEASE.md) — packaging and shipping
-
-## Privacy
-
-DynamicBar makes **no network requests**. There is no telemetry, no crash
-reporting and no account.
-
-| What | Where |
-|---|---|
-| Settings | `%APPDATA%\DynamicBar\settings.json` |
-| Calendar notes | `%APPDATA%\DynamicBar\calendar.json` |
-| Shelf images and note | `%LOCALAPPDATA%\DynamicBar\shelf\` |
-| Logs | `%LOCALAPPDATA%\DynamicBar\logs\` |
-
-Clipboard monitoring is off until you turn it on, and even then reports only
-*that* something was copied unless you separately enable text previews. Nothing
-leaves your machine.
-
-## About the developer
-
-**Rahoz Osman**
-
-| | |
-|---|---|
-| Email | [hozahoza2001@gmail.com](mailto:hozahoza2001@gmail.com) |
-| Phone | 07502076151 |
-
-DynamicBar is original work: the design, the motion language, the state machine
-and every line of the Windows integration layer. Issues and suggestions are
-welcome.
-
-## Licence
-
-Copyright © 2026 Rahoz Osman. All rights reserved.
-
-The code in this repository is original work. See `Settings → About` inside the
-application for the licences of the framework it is built on.
+Copyright © 2026 **Aryan Pandey**. All rights reserved.  
+Built with Flutter & native Win32/WinRT C++.

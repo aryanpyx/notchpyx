@@ -55,7 +55,7 @@ class LogRecord {
 class AppLog {
   AppLog._();
 
-  static const int _capacity = 400;
+  static const int _capacity = 50;
   static final ListQueue<LogRecord> _records = ListQueue<LogRecord>(_capacity);
 
   /// Records below this level are dropped before they are stored.

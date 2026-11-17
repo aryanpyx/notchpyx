@@ -6,16 +6,16 @@
 class AppInfo {
   const AppInfo._();
 
-  static const String name = 'Notch X';
+  static const String name = 'Notchpyx';
   static const String version = '0.1.0';
 
   static const String tagline = 'A Dynamic Island for Windows 11.';
 
   /// Who made it. One person, named in full in the one place a person would
   /// look for it, rather than hidden behind a copyright glyph.
-  static const String developer = 'Rahoz Osman';
+  static const String developer = 'Aryan Pandey';
   static const String developerRole = 'Design and engineering';
-  static const String developerEmail = 'hozahoza2001@gmail.com';
+  static const String developerEmail = 'aryanpandey52355@gmail.com';
 
   /// The name as an HTTP product token: User-Agent has no room for the space.
   static String get userAgentToken => name.replaceAll(' ', '');

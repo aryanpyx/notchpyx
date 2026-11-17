@@ -10,6 +10,7 @@ import '../native/hotkey_bridge.dart';
 import '../native/models/native_models.dart';
 import '../native/startup_bridge.dart';
 import '../native/system_bridge.dart';
+import '../native/windows_region_helper.dart';
 import '../settings/app_settings.dart';
 import 'app_services.dart';
 
@@ -111,7 +112,7 @@ class IslandCoordinator {
     await applyStartup();
     await applyHotkeys();
 
-    await services.tray.install(tooltip: 'Notch X');
+    await services.tray.install(tooltip: 'Notchpyx');
     await _publishTrayMenu(force: true);
 
     await _revealAtLaunch();
@@ -577,7 +578,7 @@ class IslandCoordinator {
     }
     if (reason == 'shellRestarted') {
       // Explorer takes the notification icon with it when it goes.
-      await services.tray.install(tooltip: 'Notch X');
+      await services.tray.install(tooltip: 'Notchpyx');
       await _publishTrayMenu(force: true);
     }
   }
@@ -715,6 +716,7 @@ class IslandCoordinator {
     // The settings stage shrinks only once the island has actually closed.
     if (!_stageIsPanel && services.island.phase == IslandPhase.collapsed) {
       unawaited(applyPlacement());
+      WindowsRegionHelper.trimMemory();
     }
     unawaited(services.window.setVisible(!services.island.isHidden));
     unawaited(services.window.setIgnoreMouse(services.island.isPaused));
@@ -776,12 +778,12 @@ class IslandCoordinator {
     await services.tray.setMenu(<TrayMenuEntry>[
       const TrayMenuEntry.item(
         id: _menuOpen,
-        label: 'Open Notch X',
+        label: 'Open Notchpyx',
         isDefault: true,
       ),
       TrayMenuEntry.checkbox(
         id: _menuPause,
-        label: 'Pause Notch X',
+        label: 'Pause Notchpyx',
         checked: services.island.isPaused,
       ),
       const TrayMenuEntry.separator(),
@@ -793,7 +795,7 @@ class IslandCoordinator {
         checked: current.launchAtStartup,
       ),
       const TrayMenuEntry.separator(),
-      const TrayMenuEntry.item(id: _menuQuit, label: 'Quit Notch X'),
+      const TrayMenuEntry.item(id: _menuQuit, label: 'Quit Notchpyx'),
     ]);
   }
 
