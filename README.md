@@ -104,27 +104,27 @@ assets/textizo_presets/
 <table>
   <tr>
     <td width="50%"><img src="docs/screenshots/now.png" alt="The Now page"></td>
-    <td width="50%"><img src="docs/screenshots/media.png" alt="The Media page"></td>
+    <td width="50%"><img src="docs/screenshots/shortcuts.png" alt="The Shortcuts page"></td>
   </tr>
   <tr>
-    <td><b>Now & Clock</b> &mdash; Glanceable clock, ISO week, and today's schedule at a glance.</td>
-    <td><b>Media Player</b> &mdash; Live audio waveform, album art, timeline scrub and media transport controls.</td>
+    <td><b>Now & Clock</b> &mdash; Glanceable clock, ISO week, battery, weather, and schedule at a glance.</td>
+    <td><b>Shortcuts</b> &mdash; Fast pinned launchers for YouTube, Spotify, Terminal, GitHub, and system utilities.</td>
   </tr>
   <tr>
+    <td><img src="docs/screenshots/media.png" alt="The Media page"></td>
     <td><img src="docs/screenshots/system.png" alt="The System page"></td>
+  </tr>
+  <tr>
+    <td><b>Media Player</b> &mdash; Album art, track title, timeline progress, and media transport controls.</td>
+    <td><b>System & Memory</b> &mdash; Real-time CPU, RAM graph (~20 MB engine), and network throughput.</td>
+  </tr>
+  <tr>
     <td><img src="docs/screenshots/shelf.png" alt="The Shelf page"></td>
-  </tr>
-  <tr>
-    <td><b>System & Memory</b> &mdash; Live CPU, RAM rolling graphs, Wi-Fi 6 status, and ultra-low 20 MB engine.</td>
-    <td><b>Shelf Scratchpad</b> &mdash; Drag and drop images or paste clipboard snippets instantly into the island.</td>
-  </tr>
-  <tr>
-    <td><img src="docs/screenshots/calendar.png" alt="The Calendar page"></td>
     <td><img src="docs/screenshots/timers.png" alt="The Timers page"></td>
   </tr>
   <tr>
-    <td><b>Calendar</b> &mdash; Month grid and day planner with notification reminders.</td>
-    <td><b>Timers & Stopwatch</b> &mdash; Draggable radial dial countdowns computed against wall-clock time.</td>
+    <td><b>Shelf Scratchpad</b> &mdash; Instant drop zone for clipboard images, quick notes, and temporary items.</td>
+    <td><b>Timers & Stopwatch</b> &mdash; Radial countdown dial and one-click duration presets computed against wall clock.</td>
   </tr>
 </table>
 
