@@ -60,18 +60,13 @@ Optimized from ~285 MB down to **~20 MB live working set memory**:
 
 ---
 
-## 🚀 Downloads & Quick Install
+## 🚀 Direct Download & 1-Click Install
 
-### 1. Standalone Setup Wizard (Recommended)
-Download and run the one-click installer:
-- **Installer File:** `dist_installer\Notchpyx_Setup_v1.0.0.exe` (or `c:\Users\aryan\Downloads\Notchpyx_Setup_v1.0.0.exe`)
-- Installs Notchpyx directly to `%LOCALAPPDATA%\Programs\Notchpyx`.
-- Creates Start Menu and Desktop shortcuts with auto-update and uninstaller support.
-- **Zero prerequisites**: No Visual Studio C++ compiler or Flutter SDK needed on the host system.
-
-### 2. Portable Standalone Folder
-- Located at: `c:\Users\aryan\Downloads\Notchpyx_Release\`
-- Simply run `Notchpyx.exe` directly from any folder or USB drive.
+### 💾 1-Click Windows Setup (.exe) &mdash; Use App Directly
+- **Download Notchpyx:** [**`dist_installer/Notchpyx_Setup_v1.0.0.exe`**](https://github.com/aryanpyx/notchpyx/raw/main/dist_installer/Notchpyx_Setup_v1.0.0.exe)
+- **Zero prerequisites**: No Flutter SDK, no Visual Studio C++, and no build tools required on your machine.
+- **1-Click Launch**: Simply download and run `Notchpyx_Setup_v1.0.0.exe` to use Notchpyx directly.
+- Automatically adds Start Menu and Desktop shortcuts, registers auto-start on boot, and includes a clean uninstaller.
 
 ---
 
